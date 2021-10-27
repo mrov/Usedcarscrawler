@@ -7,9 +7,9 @@ app.FLASK_APP = "app.py"
 app.FLASK_ENV = "development"
 app.FLASK_DEBUG = 1
 
-@app.route('/')
+@app.route('/updateDB')
 def index():
-  return 'Server Works!'
+  return dbController.craw_website()
   
 @app.route('/getCars')
 def say_hello():

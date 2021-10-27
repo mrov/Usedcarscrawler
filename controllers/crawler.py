@@ -1,4 +1,3 @@
-# pluralsight.py
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -6,7 +5,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 import time
-from . import systemVariables
+from datetime import datetime
+from . systemVariables import chromeDriveLocation, formattedURL
 
 
 def configure_driver():
@@ -18,13 +18,13 @@ def configure_driver():
     # For linux/Mac
     # driver = webdriver.Chrome(options = chrome_options)
     # For windows
-    driver = webdriver.Chrome(executable_path=systemVariables.chromeDriveLocation, options = chrome_options)
+    driver = webdriver.Chrome(executable_path=chromeDriveLocation, options = chrome_options)
     return driver
 
 def getCars(driver, carBrand="", page=1):
     cars = []
 
-    driver.get(systemVariables.formattedURL(carBrand, page))
+    driver.get(formattedURL(carBrand, page))
 
     try:
         WebDriverWait(driver, 10).until(lambda s: s.find_element_by_css_selector("#ad-list").is_displayed())
@@ -44,7 +44,8 @@ def getCars(driver, carBrand="", page=1):
                     "technicalFeatures": carLink.select_one("span[color='dark']").text,
                     "_id": carLink.attrs['data-lurker_list_id'],
                     "link": carLink.attrs['href'],
-                    "img": carLink.select_one("img").attrs["src"] })
+                    "img": carLink.select_one("img").attrs["src"],
+                    "created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z") })
     return cars
 
 if __name__ == "__main__":
