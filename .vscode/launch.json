@@ -5,11 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: Flask",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/dbController.py",
-            "console": "integratedTerminal"
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "flaskAPI/app.py",
+                "FLASK_ENV": "development"
+            },
+            "args": [
+                "run",
+                "--debugger",
+                "--reload"
+            ],
+            "jinja": true
         }
     ]
 }

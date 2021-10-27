@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 import time
-import systemVariables
+from . import systemVariables
 
 
 def configure_driver():
@@ -47,10 +47,12 @@ def getCars(driver, carBrand="", page=1):
                     "img": carLink.select_one("img").attrs["src"] })
     return cars
 
-# create the driver object.
-# driver = configure_driver()
+if __name__ == "__main__":
 
-# getCars(driver)
+    # create the driver object.
+    driver = configure_driver()
 
-# close the driver.
-# driver.close()
+    getCars(driver)
+
+    # close the driver.
+    driver.close()

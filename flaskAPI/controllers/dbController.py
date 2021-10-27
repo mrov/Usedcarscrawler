@@ -1,9 +1,10 @@
 import pymongo
-import crawler
 import time
+from . import crawler
+from . systemVariables import connectionString, databaseName, pageLimit
 from pymongo import MongoClient
 from pprint import pprint
-from systemVariables import databaseName, connectionString, pageLimit
+from bson.json_util import dumps
 
 def get_database():
     client = MongoClient(connectionString)
@@ -32,8 +33,14 @@ def update_database(cars):
         panic_list = list(filter(lambda x: x['code'] == 11000, e.details['writeErrors']))
         print(f"Tried to insert '{len(panic_list)}' duplicates")
         return len(panic_list)
-    
+
+def db_get_cars():
+    dbname = get_database()
+    list_cur = list(dbname["cars"].find())
+    return dumps(list_cur)
+
 if __name__ == "__main__":
+    dbname = get_database()
     page = 1
     duplicates = 0
 
