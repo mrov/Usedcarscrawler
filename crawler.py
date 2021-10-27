@@ -35,12 +35,16 @@ def getCars(driver, carBrand="", page=1):
     entirePage = BeautifulSoup(driver.page_source, "lxml")
 
     for carLink in entirePage.select("li a[data-lurker-detail='list_id']"):
-        cars.append({ "announceName": carLink.select_one("h2").text,
-                "price": carLink.select_one("span[color='graphite']").text,
-                "technicalFeatures": carLink.select_one("span[color='dark']").text,
-                "_id": carLink.attrs['data-lurker_list_id'],
-                "link": carLink.attrs['href'],
-                "img": carLink.select_one("img").attrs["src"] })
+        price = carLink.select_one("span[color='graphite']").text.replace("R$", "").replace(".", "").strip()
+
+        if price:
+            cars.append({ "announceName": carLink.select_one("h2").text,
+                    "formattedPrice": carLink.select_one("span[color='graphite']").text,
+                    "price": int(price),
+                    "technicalFeatures": carLink.select_one("span[color='dark']").text,
+                    "_id": carLink.attrs['data-lurker_list_id'],
+                    "link": carLink.attrs['href'],
+                    "img": carLink.select_one("img").attrs["src"] })
     return cars
 
 # create the driver object.
