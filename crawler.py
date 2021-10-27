@@ -18,25 +18,22 @@ def configure_driver():
     # For linux/Mac
     # driver = webdriver.Chrome(options = chrome_options)
     # For windows
-    driver = webdriver.Chrome(executable_path="./chromedriver.exe", options = chrome_options)
+    driver = webdriver.Chrome(executable_path=systemVariables.chromeDriveLocation, options = chrome_options)
     return driver
 
 def getCars(driver, carBrand="", page=1):
     cars = []
 
-    # Step 1: Go to pluralsight.com, category section with selected search keyword
     driver.get(systemVariables.formattedURL(carBrand, page))
-    # wait for the element to load
+
     try:
         WebDriverWait(driver, 10).until(lambda s: s.find_element_by_css_selector("#ad-list").is_displayed())
     except TimeoutException:
         print("TimeoutException: Element not found")
         return None
 
-    # Step 2: Create a parse tree of page sources after searching
     entirePage = BeautifulSoup(driver.page_source, "lxml")
 
-    # Step 3: Iterate over the search result and fetch the course
     for carLink in entirePage.select("li a[data-lurker-detail='list_id']"):
         cars.append({ "announceName": carLink.select_one("h2").text,
                 "price": carLink.select_one("span[color='graphite']").text,

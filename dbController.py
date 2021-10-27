@@ -6,20 +6,13 @@ from pprint import pprint
 from systemVariables import databaseName, connectionString, pageLimit
 
 def get_database():
-
-    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
     client = MongoClient(connectionString)
 
-    # Create the database for our example (we will use the same database throughout the tutorial
     return client[databaseName]
 
 def get_cars_info(carBrand="", page=1):
-
-    # create the driver object.
     driver = crawler.configure_driver()
-
     cars = crawler.getCars(driver, carBrand, page)
-
     driver.close()
 
     return cars
@@ -27,11 +20,8 @@ def get_cars_info(carBrand="", page=1):
 def update_database(cars):
     
     try:
-        # Get the database
         dbname = get_database()
-
         collection_name = dbname["cars"]
-
         collection_name.insert_many(cars, ordered=False, bypass_document_validation=True)
         
         return 0
@@ -41,7 +31,6 @@ def update_database(cars):
         print(f"tried to insert '{len(panic_list)}' duplicates")
         return len(panic_list)
     
-# This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
     page = 1
     duplicates = 0
@@ -49,4 +38,5 @@ if __name__ == "__main__":
     while duplicates == 0 and page < pageLimit:
         duplicates = update_database(get_cars_info("", page))
         page = page + 1
-        time.sleep(20)
+        if (duplicates == 0):
+            time.sleep(20)
