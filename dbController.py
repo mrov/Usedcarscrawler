@@ -24,11 +24,13 @@ def update_database(cars):
         collection_name = dbname["cars"]
         collection_name.insert_many(cars, ordered=False, bypass_document_validation=True)
         
+        print(f"Zero duplicates on page {page}")
+
         return 0
 
     except pymongo.errors.BulkWriteError as e:
         panic_list = list(filter(lambda x: x['code'] == 11000, e.details['writeErrors']))
-        print(f"tried to insert '{len(panic_list)}' duplicates")
+        print(f"Tried to insert '{len(panic_list)}' duplicates")
         return len(panic_list)
     
 if __name__ == "__main__":
@@ -38,5 +40,5 @@ if __name__ == "__main__":
     while duplicates == 0 and page < pageLimit:
         duplicates = update_database(get_cars_info("", page))
         page = page + 1
-        if (duplicates == 0):
+        if (duplicates == 0 and page < pageLimit):
             time.sleep(20)
