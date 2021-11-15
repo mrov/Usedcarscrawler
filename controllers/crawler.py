@@ -25,8 +25,10 @@ def translate_date(date, hour):
 def configure_driver():
     # Add additional Options to the webdriver
     chrome_options = Options()
+    
     # add the argument and make the browser Headless.
     chrome_options.add_argument("--headless")
+    chrome_options.add_argument('log-level=3')
     # Instantiate the Webdriver: Mention the executable path of the webdriver you have downloaded
     # For linux/Mac
     # driver = webdriver.Chrome(options = chrome_options)
@@ -67,6 +69,7 @@ def getCars(driver, carBrand="", page=1):
                     "location": post_location,
                     "postDate": translated_date,
                     "created": datetime.now() })
+    print("Crawler OK")
     return cars
 
 if __name__ == "__main__":

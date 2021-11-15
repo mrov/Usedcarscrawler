@@ -1,3 +1,4 @@
+from datetime import datetime
 import pymongo
 import controllers.crawler
 import time
@@ -40,14 +41,33 @@ def update_database(cars):
         panic_list = list(filter(lambda x: x['code'] == 11000, e.details['writeErrors']))
         print(f"tried to insert '{len(panic_list)}' duplicates")
         return len(panic_list)
+
+def populate_db(cars):
+
+    # Get the database
+    dbname = get_database()
+
+    collection_name = dbname["cars"]
+
+    for car in cars:
+        collection_name.replace_one({'_id': car['_id']}, car, True)
+
+    return 0
     
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
-    page = 1
-    duplicates = 0
 
-    while duplicates == 0 and page < pageLimit:
-        duplicates = update_database(get_cars_info("", page))
-        page = page + 1
-        if (duplicates == 0 and page < pageLimit):
-            time.sleep(20)
+    while True:
+        page = 1
+        duplicates = 0
+
+        while duplicates == 0 and page < pageLimit:
+            # duplicates = update_database(get_cars_info("", page))
+            duplicates = populate_db(get_cars_info("", page))
+            print(f"##########################   {page}    ###########################################")
+            page = page + 1
+            if (duplicates == 0 and page < pageLimit):
+                time.sleep(60)
+        
+        print(f"Dormiu as: " + datetime.now().strftime("%H:%M"))
+        time.sleep(180)
