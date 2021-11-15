@@ -24,4 +24,6 @@ pip install lxml
 
 flask
 
+pip install -U flask-cors
+
 Still working on this readme and on the project, maybe put some links for more infos and the pip install commands that i used
