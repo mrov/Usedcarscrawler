@@ -36,7 +36,7 @@ def update_database(cars, page):
 
 def db_get_cars():
     dbname = get_database()
-    list_cur = list(dbname["cars"].find().sort("postDate",pymongo.DESCENDING))
+    list_cur = list(dbname["cars"].find().sort("postDate",pymongo.ASCENDING))
     return dumps(list_cur)
 
 def craw_website():
