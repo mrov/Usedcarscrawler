@@ -43,8 +43,8 @@ def db_get_cars(request):
     endDate = request.args.get('endDate', '')
 
     query["postDate"] = {}
-    query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y")  if bool(startDate) else datetime.now() - timedelta(days=30)
-    query["postDate"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y")  if bool(endDate) else datetime.now() + timedelta(days=30)
+    query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0)  if bool(startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)
+    query["postDate"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y").replace(hour=23, minute=59)  if bool(endDate) else (datetime.now() + timedelta(days=30)).replace(hour=23, minute=59) 
 
     dbname = get_database()
 
