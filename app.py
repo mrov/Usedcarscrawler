@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from controllers import dbController
 
 app = Flask(__name__)
@@ -13,4 +14,4 @@ def index():
   
 @app.route('/getCars')
 def say_hello():
-  return dbController.db_get_cars()
+  return dbController.db_get_cars(request)

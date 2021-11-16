@@ -1,5 +1,6 @@
 import pymongo
 import time
+from datetime import datetime, timedelta
 from . import crawler
 from . systemVariables import connectionString, databaseName, pageLimit
 from pymongo import MongoClient
@@ -34,9 +35,20 @@ def update_database(cars, page):
         print(f"Tried to insert '{len(panic_list)}' duplicates")
         return len(panic_list)
 
-def db_get_cars():
+def db_get_cars(request):
+    query = {}
+
+    #Parameters
+    startDate = request.args.get('startDate', '')
+    endDate = request.args.get('endDate', '')
+
+    query["postDate"] = {}
+    query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y")  if bool(startDate) else datetime.now() - timedelta(days=30)
+    query["postDate"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y")  if bool(endDate) else datetime.now() + timedelta(days=30)
+
     dbname = get_database()
-    list_cur = list(dbname["cars"].find().sort("postDate",pymongo.ASCENDING))
+
+    list_cur = list(dbname["cars"].find(query).sort("postDate",pymongo.ASCENDING))
     return dumps(list_cur)
 
 def craw_website():
