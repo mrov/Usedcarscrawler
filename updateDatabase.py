@@ -58,6 +58,7 @@ def populate_db(cars):
 if __name__ == "__main__":
 
     while True:
+        print("started")
         page = 1
         duplicates = 0
 
@@ -69,5 +70,5 @@ if __name__ == "__main__":
             if (duplicates == 0 and page < pageLimit):
                 time.sleep(60)
         
-        print(f"Dormiu as: " + datetime.now().strftime("%H:%M"))
+        print(f"slept at: " + datetime.now().strftime("%H:%M"))
         time.sleep(180)

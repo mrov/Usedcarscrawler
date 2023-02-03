@@ -1,26 +1,30 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-import time
 from datetime import datetime, timedelta
-from . systemVariables import chromeDriveLocation, formattedURL
+from . systemVariables import chromeDriveLocation, formattedURL, monthsDictionary
 
-
-def translate_date(date, hour):
+# inputDate format "Hoje, 13:45"
+def translate_date(inputDate):
     translated_date = ""
-    if (date.upper() == "HOJE"):
+    splitedDate = inputDate.split(", ")
+    date = splitedDate[0]
+    hour = splitedDate[1]
+    if ("HOJE" in date.upper()):
         translated_date = datetime.now().strftime("%Y %b %d")
         translated_date = datetime.strptime(translated_date + " " + hour, "%Y %b %d %H:%M")
-    elif (date.upper() == "ONTEM"):
+    elif ("ONTEM" in date.upper()):
         translated_date = datetime.now() - timedelta(days=1)
         translated_date = datetime.strptime(translated_date + " " + hour, "%Y %b %d %H:%M")
-    # TODO para fazer com datas maiores que "ontem"
-    # else:
-    #     datetime.strptime(date + " " + hour, " %H:%M")
+    else:
+        day = date.split(" ")[0]
+        # month in jan format
+        month = date.split(" ")[0]
+        translated_date = datetime.now()
+        translated_date = datetime.strptime(f"{day} {monthsDictionary[month]} {datetime.now().year} {hour}", "%d %B %Y %H:%M")
     return translated_date
 
 def configure_driver():
@@ -63,8 +67,7 @@ def getCars(driver, carBrand="", page=1):
         post_date = textList[-1].text
         post_location = textList[-2].text
 
-        # Update this method to translate the new date format (Hoje, 13:45)
-        # translated_date = translate_date(post_date, post_hour)
+        translated_date = translate_date(post_date)
 
         if price:
             cars.append({ "announceName": carLink.select_one("h2").text,
@@ -78,8 +81,7 @@ def getCars(driver, carBrand="", page=1):
                     "link": carLink.attrs['href'],
                     "img": carLink.select_one("img").attrs["src"],
                     "location": post_location,
-                    # TODO format postDate
-                    "postDate": post_date,
+                    "postDate": translated_date,
                     "created": datetime.now() })
     print("Crawler OK")
     return cars
