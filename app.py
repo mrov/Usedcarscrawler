@@ -17,6 +17,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def index():
   return dbController.craw_website()
   
+
+# params startDate
+# params endDate
 @app.route('/getCars')
 @cross_origin()
 def say_hello():

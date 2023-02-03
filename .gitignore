@@ -3,5 +3,3 @@ __pycache__
 venv
 
 chromedriver.exe
-
-systemVariables.py

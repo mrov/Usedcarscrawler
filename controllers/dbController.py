@@ -42,23 +42,24 @@ def db_get_cars(request):
     startDate = request.args.get('startDate', '')
     endDate = request.args.get('endDate', '')
 
-    query["postDate"] = {}
-    query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0)  if bool(startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)
-    query["postDate"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y").replace(hour=23, minute=59)  if bool(endDate) else (datetime.now() + timedelta(days=30)).replace(hour=23, minute=59) 
+    ## TODO try to update this to postDate
+    query["created"] = {}
+    query["created"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0)  if bool(startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)
+    query["created"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y").replace(hour=23, minute=59)  if bool(endDate) else (datetime.now() + timedelta(days=30)).replace(hour=23, minute=59) 
 
     dbname = get_database()
 
-    list_cur = list(dbname["cars"].find(query).sort("postDate",pymongo.ASCENDING))
+    list_cur = list(dbname["cars"].find(query).sort("created",pymongo.ASCENDING))
     return dumps(list_cur)
 
 def craw_website():
     page = 1
     duplicates = 0
 
-    while duplicates == 0 and page < pageLimit:
+    while duplicates == 0 and page <= pageLimit:
         duplicates = update_database(get_cars_info("", page), page)
         page = page + 1
-        if (duplicates == 0 and page < pageLimit):
+        if (duplicates == 0 and page <= pageLimit):
             time.sleep(20)
 
     return { "status": "200", "message": f"Banco atualizado com sucesso {duplicates}"}
