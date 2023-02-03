@@ -4,26 +4,12 @@ WIP
 
 Required: Python 3 and Mongodb on localhost:27017 (or change the url on the systemVariables file to your mongoUrl)
 
-Needed: The systemVariables file and download chromedrive compatible with your google chrome version on they website
+Needed: The systemVariables file and download chromedrive compatible with your google chrome version on their website
 
-Besides need to install a lot of dependencies like:
+After everything configured you will need to run:
 
-sudo apt install python3-venv
+pip install -r requirements.txt
 
-python3 -m venv my-project-env
+and to run the project execute this in the terminal at the project folder:
 
-source my-project-env/bin/activate
-
-Selenium
-
-BeautifulSoup4
-
-pymongo
-
-pip install lxml
-
-flask
-
-pip install -U flask-cors
-
-Still working on this readme and on the project, maybe put some links for more infos and the pip install commands that i used
+python -m flask -A app.py --debug run

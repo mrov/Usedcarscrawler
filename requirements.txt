@@ -1,0 +1,6 @@
+selenium
+BeautifulSoup4
+pymongo
+lxml
+flask
+flask-cors
