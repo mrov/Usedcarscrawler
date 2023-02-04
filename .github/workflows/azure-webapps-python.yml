@@ -51,7 +51,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt --target="/home/site/wwwroot/__oryx_packages__"
+          pip install --upgrade pip
+          pip install -r requirements.txt --target="__oryx_packages__"
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
