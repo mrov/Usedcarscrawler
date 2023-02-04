@@ -1,6 +1,5 @@
 from flask import Flask
 from flask import request
-from controllers import dbController
 
 app = Flask(__name__)
 
@@ -12,11 +11,11 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/updateDB')
 def index():
-  return dbController.craw_website()
+  return "hello"
   
 
 # params startDate
 # params endDate
 @app.route('/getCars')
 def say_hello():
-  return dbController.db_get_cars(request)
+  return "hello world"
