@@ -21,7 +21,7 @@ name: Build and deploy Python app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: moabecrawler  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.11'              # set this to the Python version to use
+  PYTHON_VERSION: '3.9'              # set this to the Python version to use
 
 on:
   push:
@@ -49,9 +49,18 @@ jobs:
           python -m venv antenv
           source antenv/bin/activate
 
+      - name: Set up dependency caching for faster installs
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install setuptools
           pip install -r requirements.txt --target="__oryx_packages__"
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
@@ -62,6 +71,7 @@ jobs:
           name: python-app
           path: |
             .
+            !antenv
 
   deploy:
     permissions:
