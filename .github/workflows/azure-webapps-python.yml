@@ -21,7 +21,7 @@ name: Build and deploy Python app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: moabecrawler  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.11'              # set this to the Python version to use
+  PYTHON_VERSION: '3.9.15'              # set this to the Python version to use
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.11
+    - name: Set up Python 3.9.15
       uses: actions/setup-python@v2
       with:
         python-version: ${{ env.PYTHON_VERSION }}
