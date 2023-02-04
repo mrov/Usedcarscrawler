@@ -46,8 +46,8 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m venv antenv
+          source antenv/bin/activate
 
       - name: Install dependencies
         run: |
@@ -61,7 +61,7 @@ jobs:
           name: python-app
           path: |
             .
-            !venv/
+            !antenv/
 
   deploy:
     permissions:
