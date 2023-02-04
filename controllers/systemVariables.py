@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Must have google chrome installed or change drive config for edge
 
-connectionString = "mongodb://52.226.229.9:27017"
+connectionString = "mongodb://20.241.148.186:27017"
 
 databaseName = "py"
 
