@@ -57,34 +57,9 @@ jobs:
           sudo apt install python${{ env.PYTHON_VERSION }}-venv
           python -m venv --copies antenv
           source antenv/bin/activate
+          pip install --upgrade pip
           pip install setuptools
           pip install -r requirements.txt
-
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v3
-        with:
-          name: python-app
-          path: |
-            .
-            !venv/
-
-  deploy:
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: python-app
-          path: .
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
