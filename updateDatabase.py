@@ -1,6 +1,6 @@
 from datetime import datetime
 import pymongo
-import controllers.crawler
+import utils.crawlerCore
 import time
 from pymongo import MongoClient
 from pprint import pprint
@@ -17,9 +17,9 @@ def get_database():
 def get_cars_info(carBrand="", page=1):
 
     # create the driver object.
-    driver = controllers.crawler.configure_driver()
+    driver = utils.crawlerCore.configure_driver()
 
-    cars = controllers.crawler.getCars(driver, carBrand, page)
+    cars = utils.crawlerCore.getCars(driver, carBrand, page)
 
     driver.close()
 

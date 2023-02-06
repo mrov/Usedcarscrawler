@@ -1,7 +1,7 @@
 import pymongo
 import time
 from datetime import datetime, timedelta
-from controllers import crawler
+from utils import crawlerCore
 from utils.constants import connectionString, collectionName, pageLimit
 from pymongo import MongoClient
 from pprint import pprint
@@ -13,8 +13,8 @@ def get_database():
     return client[collectionName]
 
 def get_cars_info(carBrand="", page=1):
-    driver = crawler.configure_driver()
-    cars = crawler.getCars(driver, carBrand, page)
+    driver = crawlerCore.configure_driver()
+    cars = crawlerCore.getCars(driver, carBrand, page)
     driver.close()
 
     return cars
