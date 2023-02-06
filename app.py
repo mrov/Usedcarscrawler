@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
-from controllers import dbController
+from repository import carRepository
 
 app = Flask(__name__)
 
@@ -13,14 +13,17 @@ cors = CORS(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+cors = CORS(app)
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 @app.route('/updateDB')
 def index():
-  return dbController.craw_website()
-  
+  return carRepository.craw_website()
 
 # params startDate
 # params endDate
 @app.route('/getCars')
 @cross_origin()
 def say_hello():
-  return dbController.db_get_cars(request)
+  return carRepository.db_get_cars(request)

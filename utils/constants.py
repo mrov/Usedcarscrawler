@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # Must have google chrome installed or change drive config for edge
 
-connectionString = "mongodb://localhost:27017"
+connectionString = "mongodb://52.188.38.6:27017"
 
-databaseName = "py"
+collectionName = "py"
 
-pageLimit = 5
+pageLimit = 6
 
 chromeDriveLocation = r"C:\Users\Moabe\Documents\studyingWebCrawling\chromedriver.exe"
 

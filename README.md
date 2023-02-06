@@ -2,9 +2,9 @@
 
 WIP
 
-Required: Python 3 and Mongodb on localhost:27017 (or change the url on the systemVariables file to your mongoUrl)
+Required: Python 3 and Mongodb on localhost:27017 (or change the url on the constants file to your mongoUrl)
 
-Needed: The systemVariables file and download chromedrive compatible with your google chrome version on their website
+Needed: The constants file and download chromedrive compatible with your google chrome version on their website
 
 After everything configured you will need to run:
 
