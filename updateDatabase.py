@@ -1,10 +1,10 @@
-from datetime import datetime
 import pymongo
 import utils.crawlerCore
 import time
+import datetime
 from pymongo import MongoClient
 from pprint import pprint
-from utils.constants import collectionName, connectionString, pageLimit
+from utils.constants import collectionName, databaseName, connectionString, pageLimit
 
 def get_database():
 
@@ -12,7 +12,7 @@ def get_database():
     client = MongoClient(connectionString)
 
     # Create the database for our example (we will use the same database throughout the tutorial
-    return client[collectionName]
+    return client[databaseName]
 
 def get_cars_info(carBrand="", page=1):
 
@@ -31,7 +31,7 @@ def update_database(cars):
         # Get the database
         dbname = get_database()
 
-        collection_name = dbname["cars"]
+        collection_name = dbname[collectionName]
 
         collection_name.insert_many(cars, ordered=False, bypass_document_validation=True)
         
@@ -47,7 +47,7 @@ def populate_db(cars):
     # Get the database
     dbname = get_database()
 
-    collection_name = dbname["cars"]
+    collection_name = dbname[collectionName]
 
     for car in cars:
         collection_name.replace_one({'_id': car['_id']}, car, True)

@@ -2,7 +2,7 @@ import pymongo
 import time
 from datetime import datetime, timedelta
 from utils import crawlerCore
-from utils.constants import connectionString, collectionName, pageLimit
+from utils.constants import connectionString, databaseName, collectionName, pageLimit
 from pymongo import MongoClient
 from pprint import pprint
 from bson.json_util import dumps
@@ -10,7 +10,7 @@ from bson.json_util import dumps
 def get_database():
     client = MongoClient(connectionString)
 
-    return client[collectionName]
+    return client[databaseName]
 
 def get_cars_info(carBrand="", page=1):
     driver = crawlerCore.configure_driver()
@@ -23,7 +23,7 @@ def update_database(cars, page):
     
     try:
         dbname = get_database()
-        collection_name = dbname["cars"]
+        collection_name = dbname[collectionName]
         collection_name.insert_many(cars, ordered=False, bypass_document_validation=True)
         
         print(f"Zero duplicates on page {page}")
@@ -49,7 +49,7 @@ def db_get_cars(request):
 
     dbname = get_database()
 
-    list_cur = list(dbname["cars"].find(query).sort("postDate",pymongo.ASCENDING))
+    list_cur = list(dbname[collectionName].find(query).sort("postDate",pymongo.ASCENDING))
     return dumps(list_cur)
 
 def craw_website():

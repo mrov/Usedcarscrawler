@@ -3,7 +3,9 @@
 
 connectionString = "mongodb://52.188.38.6:27017"
 
-collectionName = "py"
+databaseName = "py"
+
+collectionName = "cars"
 
 pageLimit = 6
 
