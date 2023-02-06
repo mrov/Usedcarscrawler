@@ -13,13 +13,5 @@ cors = CORS(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/updateDB')
-def index():
-  return carRepository.craw_website()
-
-# params startDate
-# params endDate
-@app.route('/getCars')
-@cross_origin()
-def say_hello():
-  return carRepository.db_get_cars(request)
+# import declared routes
+import controllers.carController
