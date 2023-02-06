@@ -13,10 +13,6 @@ cors = CORS(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-cors = CORS(app)
-
-app.config['CORS_HEADERS'] = 'Content-Type'
-
 @app.route('/updateDB')
 def index():
   return carRepository.craw_website()
