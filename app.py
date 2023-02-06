@@ -1,3 +1,5 @@
+import sys
+sys.path.append("~/site/wwwroot/__oryx_packages__")
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
