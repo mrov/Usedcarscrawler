@@ -62,4 +62,4 @@ def craw_website():
         if (duplicates == 0 and page <= pageLimit):
             time.sleep(20)
 
-    return { "status": "200", "message": f"Banco atualizado com sucesso {duplicates}"}
+    return { "status": "200", "message": f"Database update succeeded {duplicates}"}
