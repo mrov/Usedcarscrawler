@@ -1,8 +1,8 @@
 import pymongo
 import time
 from datetime import datetime, timedelta
-from . import crawler
-from . systemVariables import connectionString, databaseName, pageLimit
+from controllers import crawler
+from utils.constants import connectionString, collectionName, pageLimit
 from pymongo import MongoClient
 from pprint import pprint
 from bson.json_util import dumps
@@ -10,7 +10,7 @@ from bson.json_util import dumps
 def get_database():
     client = MongoClient(connectionString)
 
-    return client[databaseName]
+    return client[collectionName]
 
 def get_cars_info(carBrand="", page=1):
     driver = crawler.configure_driver()
@@ -43,13 +43,13 @@ def db_get_cars(request):
     endDate = request.args.get('endDate', '')
 
     ## TODO try to update this to postDate
-    query["created"] = {}
-    query["created"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0)  if bool(startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)
-    query["created"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y").replace(hour=23, minute=59)  if bool(endDate) else (datetime.now() + timedelta(days=30)).replace(hour=23, minute=59) 
+    query["postDate"] = {}
+    query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0)  if bool(startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)
+    query["postDate"]["$lte"] = datetime.strptime(endDate, "%d-%m-%Y").replace(hour=23, minute=59)  if bool(endDate) else (datetime.now() + timedelta(days=30)).replace(hour=23, minute=59) 
 
     dbname = get_database()
 
-    list_cur = list(dbname["cars"].find(query).sort("created",pymongo.ASCENDING))
+    list_cur = list(dbname["cars"].find(query).sort("postDate",pymongo.ASCENDING))
     return dumps(list_cur)
 
 def craw_website():

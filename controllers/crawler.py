@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from datetime import datetime, timedelta
-from . systemVariables import chromeDriveLocation, formattedURL, monthsDictionary
+from utils.constants import chromeDriveLocation, formattedURL, monthsDictionary
 
 # inputDate format "Hoje, 13:45"
 def translate_date(inputDate):

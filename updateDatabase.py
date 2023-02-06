@@ -4,7 +4,7 @@ import controllers.crawler
 import time
 from pymongo import MongoClient
 from pprint import pprint
-from controllers.systemVariables import databaseName, connectionString, pageLimit
+from utils.constants import collectionName, connectionString, pageLimit
 
 def get_database():
 
@@ -12,7 +12,7 @@ def get_database():
     client = MongoClient(connectionString)
 
     # Create the database for our example (we will use the same database throughout the tutorial
-    return client[databaseName]
+    return client[collectionName]
 
 def get_cars_info(carBrand="", page=1):
 
