@@ -2,6 +2,7 @@ from datetime import datetime
 import pymongo
 import controllers.crawler
 import time
+from datetime import datetime
 from pymongo import MongoClient
 from pprint import pprint
 from utils.constants import collectionName, connectionString, pageLimit
