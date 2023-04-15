@@ -2,9 +2,16 @@ import pymongo
 import utils.crawlerCore
 import time
 import datetime
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateOne
 from pprint import pprint
 from utils.constants import collectionName, databaseName, connectionString, pageLimit
+
+
+class DuplicatedRegister(Exception):
+    def __init__(self, message, registers):
+        self.message = message
+        self.registers = registers
+
 
 def get_database():
 
@@ -13,6 +20,7 @@ def get_database():
 
     # Create the database for our example (we will use the same database throughout the tutorial
     return client[databaseName]
+
 
 def get_cars_info(carBrand="", page=1):
 
@@ -25,22 +33,34 @@ def get_cars_info(carBrand="", page=1):
 
     return cars
 
-def update_database(cars):
-    
-    try:
-        # Get the database
-        dbname = get_database()
 
+def update_database(cars, page):
+
+    try:
+        dbname = get_database()
         collection_name = dbname[collectionName]
 
-        collection_name.insert_many(cars, ordered=False, bypass_document_validation=True)
-        
+        operations = []
+        for car in cars:
+            filter = {"announceName": car["announceName"]}
+            update = {"$set": car}
+            operation = UpdateOne(filter, update, upsert=True)
+            operations.append(operation)
+
+        result = collection_name.bulk_write(operations)
+
+        if result.modified_count > 0:
+            raise DuplicatedRegister(
+                f"{result.modified_count} duplicates on page {page}", result.modified_count)
+
+        print(f"Zero duplicates on page {page}")
+
         return 0
 
-    except pymongo.errors.BulkWriteError as e:
-        panic_list = list(filter(lambda x: x['code'] == 11000, e.details['writeErrors']))
-        print(f"tried to insert '{len(panic_list)}' duplicates")
-        return len(panic_list)
+    except DuplicatedRegister as e:
+        print(e.message)
+        return e.registers
+
 
 def populate_db(cars):
 
@@ -53,7 +73,8 @@ def populate_db(cars):
         collection_name.replace_one({'_id': car['_id']}, car, True)
 
     return 0
-    
+
+
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
 
@@ -63,12 +84,13 @@ if __name__ == "__main__":
         duplicates = 0
 
         while duplicates == 0 and page < pageLimit:
-            # duplicates = update_database(get_cars_info("", page))
-            duplicates = populate_db(get_cars_info("", page))
-            print(f"##########################   {page}    ###########################################")
+            duplicates = update_database(get_cars_info("", page), page)
+            # duplicates = populate_db(get_cars_info("", page))
+            print(
+                f"##########################   {page}    ###########################################")
             page = page + 1
             if (duplicates == 0 and page < pageLimit):
                 time.sleep(60)
-        
-        print(f"slept at: " + datetime.now().strftime("%H:%M"))
+
+        print(f"slept at: ")
         time.sleep(180)
