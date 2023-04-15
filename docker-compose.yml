@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db
+
+  webapi:
+    image: moaberenato/usedcarsapi
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - CHROME_DRIVE_LOCATION=./chromedriver.exe
+    depends_on:
+      - mongo
+
+  web-crawler:
+    image: moaberenato/usedcarscrawler
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - CHROME_DRIVE_LOCATION=./chromedriver.exe
+    depends_on:
+      - mongo
+  
+  web-frontend:
+    image: moaberenato/frontseminovos
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URI=localhost:5000
+      - PORT=80
+    depends_on:
+      - webapi

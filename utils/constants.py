@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 # Must have google chrome installed or change drive config for edge
 
-connectionString = "mongodb://52.188.38.6:27017"
+import os
+
+mongo_uri = os.environ.get('MONGO_URI') if os.environ.get(
+    'MONGO_URI') else "mongodb://localhost:27017"
+
+connectionString = mongo_uri
 
 databaseName = "py"
 
 collectionName = "cars"
 
-pageLimit = 6
+pageLimit = 10
 
-chromeDriveLocation = r"C:\Users\Moabe\Documents\studyingWebCrawling\chromedriver.exe"
+chromeDriveLocation = os.environ.get('CHROME_DRIVE_LOCATION')
 
 monthsDictionary = {
     "jan": "January",
@@ -26,6 +31,6 @@ monthsDictionary = {
     "dez": "December"
 }
 
+
 def formattedURL(carBrand, page):
     return f"https://www.olx.com.br/autos-e-pecas/carros-vans-e-utilitarios/estado-pe?o={page}&q={carBrand}"
-    

@@ -5,3 +5,5 @@ venv
 chromedriver.exe
 
 .vscode
+
+data
