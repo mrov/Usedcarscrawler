@@ -2,7 +2,7 @@ import logging
 import pymongo
 import utils.crawlerCore
 import time
-import datetime
+from datetime import datetime
 from pymongo import MongoClient, UpdateOne
 from pprint import pprint
 from utils.constants import collectionName, databaseName, connectionString, pageLimit

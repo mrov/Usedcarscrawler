@@ -16,7 +16,6 @@ services:
       - "5000:5000"
     environment:
       - MONGO_URI=mongodb://mongo:27017
-      - CHROME_DRIVE_LOCATION=./chromedriver.exe
     depends_on:
       - mongo
 

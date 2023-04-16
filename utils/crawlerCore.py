@@ -86,7 +86,7 @@ def getCars(driver, carBrand="", page=1):
 
         translated_date = translate_date(post_date)
 
-        if price:
+        if price and int(price) < 300000:
             cars.append({"announceName": carCard.select_one("h2").text,
                          "formattedPrice": formattedPrice.text,
                          "price": int(price),
