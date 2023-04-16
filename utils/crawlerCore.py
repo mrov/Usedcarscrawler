@@ -77,7 +77,6 @@ def getCars(driver, carBrand="", page=1):
         year = labelGroup[1].text
         gasType = labelGroup[2].text
         shiftType = labelGroup[3].text
-        # TODO OLX changed how the informations structucre is showing up, need to fix how get post date and location
         post_date = labelGroup[-1].text
         post_location = labelGroup[-3].text
 
