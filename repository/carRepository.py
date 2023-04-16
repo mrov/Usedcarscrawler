@@ -1,3 +1,4 @@
+import logging
 import pymongo
 import time
 from datetime import datetime, timedelta
@@ -47,12 +48,12 @@ def update_database(cars, page):
             raise DuplicatedRegister(
                 f"{result.modified_count} duplicates on page {page}", result.modified_count)
 
-        print(f"Zero duplicates on page {page}")
+        logging.info(f"Zero duplicates on page {page}")
 
         return 0
 
     except DuplicatedRegister as e:
-        print(e.message)
+        logging.info(e.message)
         return e.registers
 
 
@@ -63,7 +64,6 @@ def db_get_cars(request):
     startDate = request.args.get('startDate', '')
     endDate = request.args.get('endDate', '')
 
-    # TODO try to update this to postDate
     query["postDate"] = {}
     query["postDate"]["$gte"] = datetime.strptime(startDate, "%d-%m-%Y").replace(hour=0, minute=0) if bool(
         startDate) else (datetime.now() - timedelta(days=30)).replace(hour=0, minute=0)

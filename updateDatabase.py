@@ -1,3 +1,4 @@
+import logging
 import pymongo
 import utils.crawlerCore
 import time
@@ -11,6 +12,12 @@ class DuplicatedRegister(Exception):
     def __init__(self, message, registers):
         self.message = message
         self.registers = registers
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 def get_database():
@@ -53,12 +60,12 @@ def update_database(cars, page):
             raise DuplicatedRegister(
                 f"{result.modified_count} duplicates on page {page}", result.modified_count)
 
-        print(f"Zero duplicates on page {page}")
+        logging.info(f"Zero duplicates on page {page}")
 
         return 0
 
     except DuplicatedRegister as e:
-        print(e.message)
+        logging.info(e.message)
         return e.registers
 
 
@@ -79,18 +86,18 @@ def populate_db(cars):
 if __name__ == "__main__":
 
     while True:
-        print("started")
+        logging.info("started")
         page = 1
         duplicates = 0
 
         while duplicates == 0 and page < pageLimit:
             duplicates = update_database(get_cars_info("", page), page)
             # duplicates = populate_db(get_cars_info("", page))
-            print(
+            logging.info(
                 f"##########################   {page}    ###########################################")
             page = page + 1
             if (duplicates == 0 and page < pageLimit):
                 time.sleep(60)
 
-        print(f"slept at: ")
+        logging.info(f"slept at: ")
         time.sleep(180)

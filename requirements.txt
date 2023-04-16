@@ -2,5 +2,6 @@ selenium
 BeautifulSoup4
 pymongo
 lxml
+pytz
 Flask>=2.0
 Flask-Cors>=3.0

@@ -9,6 +9,11 @@ from utils.constants import chromeDriveLocation, formattedURL, monthsDictionary
 
 # inputDate format "Hoje, 13:45"
 
+import logging
+import pytz
+
+utc_tz = pytz.timezone('Etc/GMT-3')
+
 
 def translate_date(inputDate):
     translated_date = ""
@@ -30,7 +35,7 @@ def translate_date(inputDate):
         translated_date = datetime.now()
         translated_date = datetime.strptime(
             f"{day} {monthsDictionary[month]} {datetime.now().year} {hour}", "%d %B %Y %H:%M")
-    return translated_date
+    return utc_tz.localize(translated_date)
 
 
 def configure_driver():
@@ -84,7 +89,7 @@ def getCars(driver, carBrand="", page=1):
 
         if price:
             cars.append({"announceName": carCard.select_one("h2").text,
-                         "formattedPrice": formattedPrice,
+                         "formattedPrice": formattedPrice.text,
                          "price": int(price),
                          "kilometer": kilometer,
                          "year": year,
@@ -95,7 +100,7 @@ def getCars(driver, carBrand="", page=1):
                          "location": post_location,
                          "postDate": translated_date,
                          "created": datetime.now()})
-    print("Crawler OK")
+    logging.info("Crawler OK")
     return cars
 
 
