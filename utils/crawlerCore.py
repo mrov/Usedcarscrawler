@@ -65,26 +65,23 @@ def getCars(driver, carBrand="", page=1):
     entirePage = BeautifulSoup(driver.page_source, "lxml")
 
     for carCard in entirePage.select('li a[data-ds-component="DS-AdCardHorizontal"]'):
-        labelGroup = carCard.select('ul[data-testid="labelGroup"] li')
+        second_div = carCard.select_one('div:nth-of-type(2)')
+        labelGroup = second_div.select('span')
         formattedPrice = carCard.select_one(
             "span[color='--color-neutral-130']")
         price = checkPrice(formattedPrice)
         # DEBUG
-        # for index, node in enumerate(carCard.select("span[color='--color-neutral-130']"), start=0):
+        # for index, node in enumerate(labelGroup, start=0):
         #     print(f"{index}  {node.text}")
         kilometer = labelGroup[0].text
         year = labelGroup[1].text
-        if (len(labelGroup) > 3):
-            gasType = labelGroup[2].text
-            shiftType = labelGroup[3].text
-        else:
-            gasType = ''
-            shiftType = ''
+        gasType = labelGroup[2].text
+        shiftType = labelGroup[3].text
         # TODO OLX changed how the informations structucre is showing up, need to fix how get post date and location
-        # post_date = textList[-1].text
-        # post_location = textList[-2].text
+        post_date = labelGroup[-1].text
+        post_location = labelGroup[-3].text
 
-        # translated_date = translate_date(post_date)
+        translated_date = translate_date(post_date)
 
         if price:
             cars.append({"announceName": carCard.select_one("h2").text,
@@ -96,8 +93,8 @@ def getCars(driver, carBrand="", page=1):
                          "gasType": gasType,
                          "link": carCard.attrs['href'],
                          "img": carCard.select_one("img").attrs["src"],
-                         #  "location": post_location,
-                         #  "postDate": translated_date,
+                         "location": post_location,
+                         "postDate": translated_date,
                          "created": datetime.now()})
     print("Crawler OK")
     return cars
