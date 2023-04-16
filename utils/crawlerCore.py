@@ -1,3 +1,5 @@
+import logging
+import pytz
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -8,9 +10,6 @@ from datetime import datetime, timedelta
 from utils.constants import chromeDriveLocation, formattedURL, monthsDictionary
 
 # inputDate format "Hoje, 13:45"
-
-import logging
-import pytz
 
 utc_tz = pytz.timezone('Etc/GMT-3')
 

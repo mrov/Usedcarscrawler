@@ -99,5 +99,5 @@ if __name__ == "__main__":
             if (duplicates == 0 and page < pageLimit):
                 time.sleep(60)
 
-        logging.info(f"slept at: ")
+        logging.info(f"slept at: {datetime.now()}")
         time.sleep(180)
